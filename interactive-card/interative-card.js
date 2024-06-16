@@ -24,15 +24,29 @@ class Card {
       this.defineCenterPosition();
     });
 
+    let hover = false;
+    let printed = true;
+
     this.el.addEventListener("mouseover", (event) => {
+      hover = true;
       this.defineStyle(event.x, event.y);
     });
 
     this.el.addEventListener("mousemove", (event) => {
-      this.defineStyle(event.offsetX, event.offsetY);
+      hover = true;
+      if (printed) {
+        printed = false;
+        requestAnimationFrame(() => {
+          if (hover) {
+            this.defineStyle(event.offsetX, event.offsetY);
+          }
+          setTimeout(() => printed = true, 30);
+        });
+      }
     });
 
     this.el.addEventListener("mouseleave", () => {
+      hover = false;
       this.resetStyle();
     });
   }
